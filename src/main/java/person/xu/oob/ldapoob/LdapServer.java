@@ -27,7 +27,7 @@ public class LdapServer implements ApplicationRunner {
 
         config.setListenerConfigs(new InMemoryListenerConfig(
                 "listen",
-                InetAddress.getByName("0.0.0.0"),
+                InetAddress.getByName(properties.getIp()),
                 properties.getPort(),
                 ServerSocketFactory.getDefault(),
                 SocketFactory.getDefault(),
@@ -35,7 +35,7 @@ public class LdapServer implements ApplicationRunner {
 
         config.addInMemoryOperationInterceptor(new RecordOperationInterceptor(recordRepository));
         InMemoryDirectoryServer ds = new InMemoryDirectoryServer(config);
-        System.out.println("Running ldap server on port: " + properties.getPort());
+        System.out.printf("Running ldap server on %s:%d ", properties.getIp(), properties.getPort());
         ds.startListening();
 //        ds.shutDown(true);
 

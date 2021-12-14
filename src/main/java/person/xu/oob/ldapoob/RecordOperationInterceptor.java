@@ -16,10 +16,11 @@ public class RecordOperationInterceptor extends InMemoryOperationInterceptor {
     @Override
     public void processSearchResult(InMemoryInterceptedSearchResult result) {
         String id = result.getRequest().getBaseDN();
-        System.out.println("receive id: " + id);
+        System.out.printf("receive id %s from %s", id, result.getConnectedAddress());
         Optional<Record> record = recordRepository.findById(id);
         record.ifPresent(r -> {
                     r.setAccess();
+                    r.updateReceiveTime();
                     recordRepository.save(r);
                 }
         );
