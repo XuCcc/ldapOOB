@@ -1,6 +1,7 @@
 package person.xu.oob.ldapoob;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -22,6 +23,20 @@ public class ApiController {
     public void unregister(@PathVariable(name = "id") String id) {
         recordRepository.deleteById(id);
     }
+
+    @PostMapping("/{id}/access")
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    public void access(@PathVariable(name = "id") String id) {
+        Optional<Record> record = recordRepository.findById(id);
+        record.ifPresent(r -> {
+                    r.setAccess();
+                    r.updateReceiveTime();
+                    recordRepository.save(r);
+                }
+        );
+
+    }
+
 
     @GetMapping("/{id}/access")
     public boolean isAccess(@PathVariable(name = "id") String id) {
