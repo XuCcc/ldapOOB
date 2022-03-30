@@ -34,8 +34,20 @@ public class ApiController {
                     recordRepository.save(r);
                 }
         );
-
     }
+
+    @GetMapping("/{id}/read")
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    public void read(@PathVariable(name = "id") String id) {
+        Optional<Record> record = recordRepository.findById(id);
+        record.ifPresent(r -> {
+                    r.setAccess();
+                    r.updateReceiveTime();
+                    recordRepository.save(r);
+                }
+        );
+    }
+
 
 
     @GetMapping("/{id}/access")
